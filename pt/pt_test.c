@@ -15,7 +15,7 @@ struct pt_entry {
 };
 
 
-static struct pt_entry *pt_list;
+static struct pt_entry *pt_list = NULL;
 
 int pt_schedule(pt_func func, void *args)
 {
