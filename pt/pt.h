@@ -8,21 +8,7 @@
 #ifndef __PT_H__
 #define __PT_H__
 
-#define FEP_2(WHAT, WHAT_LAST, X, Y) WHAT_LAST(X,Y)
-#define FEP_4(WHAT, WHAT_LAST, X, Y, ...) WHAT(X,Y)FEP_2(WHAT, WHAT_LAST, __VA_ARGS__)
-#define FEP_6(WHAT, WHAT_LAST, X, Y, ...) WHAT(X,Y)FEP_4(WHAT, WHAT_LAST, __VA_ARGS__)
-#define FEP_8(WHAT, WHAT_LAST, X, Y, ...) WHAT(X,Y)FEP_6(WHAT, WHAT_LAST, __VA_ARGS__)
-#define FEP_10(WHAT, WHAT_LAST, X, Y, ...) WHAT(X,Y)FEP_8(WHAT, WHAT_LAST, __VA_ARGS__)
-#define FEP_12(WHAT, WHAT_LAST, X, Y, ...) WHAT(X,Y)FEP_10(WHAT, WHAT_LAST, __VA_ARGS__)
-#define FEP_14(WHAT, WHAT_LAST, X, Y, ...) WHAT(X,Y)FEP_12(WHAT, WHAT_LAST, __VA_ARGS__)
-#define FEP_16(WHAT, WHAT_LAST, X, Y, ...) WHAT(X,Y)FEP_14(WHAT, WHAT_LAST, __VA_ARGS__)
-
-#define GET_MACRO(_1,_2,_3,_4,_5,_6,_7,_8,_9,_10,_11,_12,_13,_14,_15,_16,NAME,...) NAME
-#define FOREACH_PAIR(action, ...) \
-  GET_MACRO(__VA_ARGS__,FEP_16,OOPS15,FEP_14,OOPS13,FEP_12,OOPS11,FEP_10,OOPS9,FEP_8,OOPS7,FEP_6,OOPS5,FEP_4,OOPS3,FEP_2,OOPS1,)(action,action,__VA_ARGS__)
-#define FOREACH_PAIR_LAST(action, action_last, ...) \
-  GET_MACRO(__VA_ARGS__,FEP_16,OOPS15,FEP_14,OOPS13,FEP_12,OOPS11,FEP_10,OOPS9,FEP_8,OOPS7,FEP_6,OOPS5,FEP_4,OOPS3,FEP_2,OOPS1,)(action,action_last,__VA_ARGS__)
-
+#include "../macros/macros.h"
 
 typedef void *pt_context_p;
 
@@ -83,6 +69,11 @@ int PT_CONCAT(pt_func_,name)(void *args_arg, void **ctx_arg) { \
 #define PT_YIELD ctx->pt_state = __LINE__; return PT_RESUME; case __LINE__: do {} while(0)
 #define PT_WAIT_WHILE(cond) do {ctx->pt_state = __LINE__; case __LINE__: if((cond)) return PT_RESUME; } while(0)
 #define PT_WAIT_UNTIL(cond) do {ctx->pt_state = __LINE__; case __LINE__: if(!(cond)) return PT_RESUME; } while(0)
+
+typedef int (*pt_func)(void *, void **);
+
+extern int pt_schedule(pt_func func, void *args);
+extern int pt_run(void);
 
 
 

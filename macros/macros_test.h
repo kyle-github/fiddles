@@ -1,0 +1,22 @@
+
+#include "macros.h"
+
+#define ADD_COMMA(X) ADD_COMMA_1(X)
+#define ADD_COMMA_1(X) X,
+#define IDENTITY(X) IDENTITY_1(X)
+#define IDENTITY_1(X) X
+
+int foo[] = {FOREACH_LAST(ADD_COMMA,IDENTITY, a, b, c) };
+
+FOREACH(ADD_COMMA, 1, 2, 3)
+FOREACH(ADD_COMMA, 1, 2)
+FOREACH(ADD_COMMA, 1)
+
+
+#define ADD_SPACESHIP(a,b) ADD_SPACESHIP_1(a,b)
+#define ADD_SPACESHIP_1(a,b) a<->b
+
+FOREACH_PAIR(ADD_SPACESHIP, a, b, x, y, foo, bar)
+FOREACH_PAIR(ADD_SPACESHIP, a, b, x, y)
+FOREACH_PAIR(ADD_SPACESHIP, a, b)
+
